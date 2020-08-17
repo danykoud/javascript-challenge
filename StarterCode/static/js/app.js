@@ -1,18 +1,15 @@
 // from data.js
 var tableData = data;
 
-// YOUR CODE HERE!
-var button = d3.select('#filter-btn')
+// select tbody 
 var tbody = d3.select('tbody')
-var date_UFO = d3.select('#datetime')
 
 
+function table_visual(data) {
 
+    tbody.text("")
 
-
-function UFO() {
-
-    tableData.forEach(UFO_data => {
+    data.forEach(UFO_data => {
         var row = tbody.append('tr');
         Object.entries(UFO_data).forEach(([key, value]) => {
             var cell = row.append('td');
@@ -20,30 +17,19 @@ function UFO() {
             cell.text(value);
         });
     });
-}
-UFO(tableData);
-// // YOUR CODE HERE!
-
-function searchDate() {
-    d3.event.preventDefault();
-    var date = date_UFO.property("value");
-
-    filterDate = tableData.filter(tableData => tableData.datetime === date);
-
-    tbody.html("");
-
-    let res = {
-        filterDate
-    }
-
-    if (res.filterDate.length !== 0) {
-
-        UFO(filterDate);
-
-    } else {
-        tbody.append('tr').append('td').text('no result found! keep searching')
-    }
 };
 
+table_visual(tableData);
 
-button.on("click", searchDate)
+//select the user's input and the filter button
+var date_UFO = d3.select('#datetime');
+var button = d3.select('#filter-btn');
+
+// filter data with date
+function searchDate() {
+    d3.event.preventDefault();
+    console.log(date_UFO.property("value"));
+    var input_table_info = tableData.filter(UFO_data => UFO_data.datetime === date_UFO.property("value"));
+    table_visual(input_table_info);
+};
+date_UFO.on("change", searchDate);
